@@ -122,7 +122,7 @@ const PaymentScreen = () => {
                             {cartItems.map((item, index) => (
                                 <div key={index} className="flex justify-between items-center bg-white/5 p-3 rounded-lg">
                                     <div className="flex items-center gap-4">
-                                        <img src={item.image} alt={item.name} className="w-16 h-16 rounded object-cover" />
+                                        <img src={item.imageUrl || item.image} alt={item.name} className="w-16 h-16 rounded object-cover" />
                                         <div>
                                             <p className="font-semibold">{item.name}</p>
                                             <p className="text-sm opacity-80">{item.quantity} kg</p>

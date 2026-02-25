@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    image: {
+    imageUrl: {
         type: String,
         required: true,
     },
@@ -27,9 +27,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    isAvailable: {
-        type: Boolean,
-        default: true,
+    stockStatus: {
+        type: String,
+        enum: ['inStock', 'outOfStock'],
+        default: 'inStock',
     }
 }, { timestamps: true });
 

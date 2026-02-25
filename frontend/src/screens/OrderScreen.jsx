@@ -73,8 +73,8 @@ const OrderScreen = () => {
                         <div>
                             <h2 className="text-xl font-bold mb-3 text-accent border-b border-white/20 pb-1 w-fit">Order Status</h2>
                             <div className={`inline-block px-4 py-2 rounded-lg font-bold ${order.status === 'Delivered' ? 'bg-green-500/20 text-green-400 border border-green-500' :
-                                    order.status === 'Cancelled' ? 'bg-red-500/20 text-red-400 border border-red-500' :
-                                        'bg-blue-500/20 text-blue-300 border border-blue-500'
+                                order.status === 'Cancelled' ? 'bg-red-500/20 text-red-400 border border-red-500' :
+                                    'bg-blue-500/20 text-blue-300 border border-blue-500'
                                 }`}>
                                 {order.status}
                             </div>
@@ -101,7 +101,7 @@ const OrderScreen = () => {
                             {order.orderItems.map((item, index) => (
                                 <div key={index} className="flex justify-between items-center">
                                     <div className="flex items-center gap-3">
-                                        <img src={item.image} alt={item.name} className="w-12 h-12 rounded object-cover" />
+                                        <img src={item.imageUrl || item.image} alt={item.name} className="w-12 h-12 rounded object-cover" />
                                         <div>
                                             <Link to={`/product/${item.product}`} className="font-semibold hover:text-accent">
                                                 {item.name}

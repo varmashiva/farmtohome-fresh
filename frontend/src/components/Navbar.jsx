@@ -40,7 +40,7 @@ const Navbar = () => {
                         <FaShoppingCart className="text-xl" />
                         {cartItems.length > 0 && (
                             <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
-                                {cartItems.length}
+                                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                             </span>
                         )}
                     </Link>

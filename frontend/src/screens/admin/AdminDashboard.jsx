@@ -23,16 +23,26 @@ const AdminDashboard = () => {
             return;
         }
 
-        const fetchOrders = async () => {
+        const fetchData = async () => {
             try {
-                const { data } = await api.get('/orders');
-                setOrders(data);
-                calculateStats(data);
+                const [ordersRes, revenueRes] = await Promise.all([
+                    api.get('/orders'),
+                    api.get('/admin/revenue')
+                ]);
+                setOrders(ordersRes.data);
+
+                const revData = revenueRes.data;
+                setStats({
+                    totalOrders: revData.totalOrders,
+                    totalRevenue: revData.totalRevenue,
+                    comm1Rev: revData.community1Revenue,
+                    comm2Rev: revData.community2Revenue
+                });
             } catch (error) {
                 console.error(error);
             }
         };
-        fetchOrders();
+        fetchData();
 
         if (socket) {
             socket.on('orderCreated', (newOrder) => {
@@ -59,34 +69,17 @@ const AdminDashboard = () => {
         };
     }, [user, navigate, socket]);
 
-    const calculateStats = (data) => {
-        let rev = 0;
-        let c1 = 0;
-        let c2 = 0;
-
-        data.forEach(order => {
-            if (order.isPaid) {
-                rev += order.totalPrice;
-                if (order.shippingAddress.community === 'Community 1') c1 += order.totalPrice;
-                if (order.shippingAddress.community === 'Community 2') c2 += order.totalPrice;
-            }
-        });
-
-        setStats({
-            totalOrders: data.length,
-            totalRevenue: rev,
-            comm1Rev: c1,
-            comm2Rev: c2
-        });
-    };
+    // We rely mostly on the backend for heavy initial calculation. 
+    // Live increments added via socket below are kept lightweight.
 
     return (
         <div className="max-w-6xl mx-auto mt-6">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-4xl font-bold border-b-4 border-accent pb-2 inline-block">Admin Dashboard</h1>
-                <div className="space-x-4">
+                <div className="space-x-4 flex flex-wrap justify-end gap-y-2">
                     <Link to="/admin/products" className="glass-button px-6 py-2 rounded-lg font-bold">Manage Products</Link>
                     <Link to="/admin/orders" className="glass-button px-6 py-2 rounded-lg font-bold">All Orders</Link>
+                    <Link to="/admin/users" className="glass-button px-6 py-2 rounded-lg font-bold border-accent/50 text-accent">Manage Users</Link>
                 </div>
             </div>
 
@@ -140,7 +133,7 @@ const AdminDashboard = () => {
                                 <td className="p-4 font-bold text-green-300">₹{order.totalPrice}</td>
                                 <td className="p-4">
                                     <span className={`px-3 py-1 text-xs font-bold rounded-full ${order.status === 'Pending' ? 'bg-orange-500/20 text-orange-400' :
-                                            order.status === 'Delivered' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'
+                                        order.status === 'Delivered' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'
                                         }`}>
                                         {order.status}
                                     </span>

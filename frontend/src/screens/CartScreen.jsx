@@ -25,7 +25,7 @@ const CartScreen = () => {
                     <div className="lg:col-span-2 space-y-4">
                         {cartItems.map((item) => (
                             <div key={item.product} className="glass-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                                <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
+                                <img src={item.imageUrl || item.image} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
                                 <div className="flex-1 text-center sm:text-left">
                                     <Link to={`/product/${item.product}`} className="text-xl font-bold hover:text-accent">
                                         {item.name}

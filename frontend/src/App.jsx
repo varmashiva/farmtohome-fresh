@@ -17,6 +17,7 @@ import AuthSuccessScreen from './screens/AuthSuccessScreen';
 import AdminDashboard from './screens/admin/AdminDashboard';
 import ProductListScreen from './screens/admin/ProductListScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
+import UserListScreen from './screens/admin/UserListScreen';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/products" element={<ProductListScreen />} />
               <Route path="/admin/orders" element={<OrderListScreen />} />
+              <Route path="/admin/users" element={<UserListScreen />} />
             </Route>
           </Routes>
         </main>

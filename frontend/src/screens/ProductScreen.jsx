@@ -55,7 +55,7 @@ const ProductScreen = () => {
             </Link>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="glass-card overflow-hidden p-2 rounded-2xl">
-                    <img src={product.image} alt={product.name} className="w-full h-auto object-cover rounded-xl" />
+                    <img src={product.imageUrl || product.image} alt={product.name} className="w-full h-auto object-cover rounded-xl" />
                 </div>
                 <div className="flex flex-col justify-center">
                     <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
@@ -69,12 +69,12 @@ const ProductScreen = () => {
 
                         <div className="flex justify-between items-center text-lg border-b border-white/10 pb-4">
                             <span>Status:</span>
-                            <span className={`font-semibold ${product.isAvailable ? 'text-green-300' : 'text-red-400'}`}>
-                                {product.isAvailable ? 'Freshley Available' : 'Currently Unavailable'}
+                            <span className={`font-semibold ${product.stockStatus === 'inStock' ? 'text-green-300' : 'text-red-400'}`}>
+                                {product.stockStatus === 'inStock' ? 'Freshley Available' : 'Currently Unavailable'}
                             </span>
                         </div>
 
-                        {product.isAvailable && (
+                        {product.stockStatus === 'inStock' && (
                             <div className="flex justify-between items-center text-lg border-b border-white/10 pb-4">
                                 <span>Quantity:</span>
                                 <select
@@ -93,7 +93,7 @@ const ProductScreen = () => {
 
                         <button
                             onClick={addToCartHandler}
-                            disabled={!product.isAvailable}
+                            disabled={product.stockStatus !== 'inStock'}
                             className="w-full glass-button py-4 mt-4 rounded-xl font-bold text-xl uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Add to Cart

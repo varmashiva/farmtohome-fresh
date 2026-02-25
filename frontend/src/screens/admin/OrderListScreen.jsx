@@ -35,6 +35,17 @@ const OrderListScreen = () => {
         }
     };
 
+    const cancelOrderHandler = async (id) => {
+        if (window.confirm('Are you certain you want to cancel this order?')) {
+            try {
+                await api.put(`/orders/${id}/cancel`);
+                setOrders(orders.map(o => o._id === id ? { ...o, status: 'cancelled' } : o));
+            } catch (err) {
+                alert("Failed to cancel order");
+            }
+        }
+    };
+
     const filteredOrders = orders.filter(o => {
         if (filter === 'All') return true;
         return o.shippingAddress.community === filter;
@@ -98,17 +109,25 @@ const OrderListScreen = () => {
                                         <select
                                             value={order.status}
                                             onChange={(e) => updateStatus(order._id, e.target.value)}
-                                            className={`w-full p-2 text-sm font-bold rounded-lg cursor-pointer ${order.status === 'Cancelled' ? 'bg-red-500 text-white' :
-                                                    order.status === 'Delivered' ? 'bg-green-500 text-white' :
-                                                        'bg-white text-black'
+                                            className={`w-full p-2 text-sm font-bold rounded-lg cursor-pointer ${order.status === 'cancelled' ? 'bg-red-500 text-white' :
+                                                order.status === 'delivered' ? 'bg-green-500 text-white' :
+                                                    'bg-white text-black'
                                                 }`}
                                         >
-                                            <option value="Pending">Pending</option>
-                                            <option value="Confirmed">Confirmed</option>
-                                            <option value="Out for delivery">Out for delivery</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="out_for_delivery">Out for delivery</option>
+                                            <option value="delivered">Delivered</option>
+                                            <option value="cancelled">Cancelled</option>
                                         </select>
+                                        {order.status !== 'cancelled' && order.status !== 'delivered' && (
+                                            <button
+                                                onClick={() => cancelOrderHandler(order._id)}
+                                                className="w-full mt-2 text-xs uppercase font-bold text-red-400 hover:text-red-300 border border-red-500/30 rounded py-1 transition"
+                                            >
+                                                Cancel Request
+                                            </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

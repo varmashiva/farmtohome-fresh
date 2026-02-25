@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema({
             },
         },
     ],
+    community: {
+        type: String,
+        required: true,
+        enum: ['Community 1', 'Community 2']
+    },
     shippingAddress: {
         name: { type: String, required: true },
         phoneNumber: { type: String, required: true },
@@ -56,8 +61,8 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Out for delivery', 'Delivered', 'Cancelled'],
-        default: 'Pending',
+        enum: ['pending', 'confirmed', 'out_for_delivery', 'delivered', 'cancelled'],
+        default: 'pending',
     },
 }, { timestamps: true });
 

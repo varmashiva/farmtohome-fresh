@@ -38,7 +38,8 @@ export const createOrder = async (req, res) => {
 // @route   GET /api/orders
 export const getOrders = async (req, res) => {
     try {
-        const orders = await Order.find({}).populate('user', 'id name');
+        const filter = req.query.community ? { community: req.query.community } : {};
+        const orders = await Order.find(filter).populate('user', 'id name');
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -65,6 +66,43 @@ export const updateOrderStatus = async (req, res) => {
         if (order) {
             order.status = req.body.status || order.status;
             const updatedOrder = await order.save();
+
+            // Emit socket event for real-time status update
+            const io = req.app.get('io');
+            if (io) {
+                io.emit('orderStatusUpdated', {
+                    orderId: updatedOrder._id,
+                    status: updatedOrder.status
+                });
+            }
+
+            res.json(updatedOrder);
+        } else {
+            res.status(404).json({ message: 'Order not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Cancel order explicitly
+// @route   PUT /api/orders/:id/cancel
+export const cancelOrder = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (order) {
+            order.status = 'cancelled';
+            const updatedOrder = await order.save();
+
+            const io = req.app.get('io');
+            if (io) {
+                io.emit('orderStatusUpdated', {
+                    orderId: updatedOrder._id,
+                    status: updatedOrder.status
+                });
+            }
+
             res.json(updatedOrder);
         } else {
             res.status(404).json({ message: 'Order not found' });

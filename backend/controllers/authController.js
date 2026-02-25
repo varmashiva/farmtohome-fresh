@@ -21,10 +21,14 @@ export const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com'];
+        const role = adminEmails.includes(email) ? 'admin' : 'customer';
+
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
+            role,
         });
 
         if (user) {
@@ -52,6 +56,12 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (!user.authProvider || user.authProvider === 'local') && (await bcrypt.compare(password, user.password))) {
+            const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com'];
+            if (adminEmails.includes(user.email) && user.role !== 'admin') {
+                user.role = 'admin';
+                await user.save();
+            }
+
             res.json({
                 _id: user._id,
                 name: user.name,
@@ -78,7 +88,7 @@ const getOAuthClient = () => {
         oAuth2Client = new OAuth2Client(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'http://localhost:5174/api/auth/google/callback'
+            'http://localhost:5173/api/auth/google/callback'
         );
     }
     return oAuth2Client;
@@ -116,23 +126,34 @@ export const googleCallback = async (req, res) => {
 
         let user = await User.findOne({ email });
 
+        const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com'];
+        const intendedRole = adminEmails.includes(email) ? 'admin' : 'customer';
+
         if (!user) {
             // New User via Google
-            const role = email === 'shivavarma336@gmail.com' ? 'admin' : 'customer';
             user = await User.create({
                 name,
                 email,
                 googleId,
                 profileImage,
-                role,
+                role: intendedRole,
                 authProvider: 'google'
             });
         } else {
+            let isUserModified = false;
             // Existing user - ensure google info is attached
             if (user.authProvider !== 'google') {
                 user.googleId = googleId;
                 user.authProvider = 'google';
                 user.profileImage = profileImage;
+                isUserModified = true;
+            }
+            // Elevate to admin if in array but not currently admin
+            if (intendedRole === 'admin' && user.role !== 'admin') {
+                user.role = 'admin';
+                isUserModified = true;
+            }
+            if (isUserModified) {
                 await user.save();
             }
         }
@@ -140,11 +161,11 @@ export const googleCallback = async (req, res) => {
         const token = generateToken(user._id);
 
         // Redirect back to frontend with the token explicitly
-        res.redirect(`http://localhost:5174/auth-success?token=${token}`);
+        res.redirect(`http://localhost:5173/auth-success?token=${token}`);
 
     } catch (error) {
         console.error('Google Auth Error:', error);
-        res.redirect('http://localhost:5174/login?error=GoogleAuthFailed');
+        res.redirect('http://localhost:5173/login?error=GoogleAuthFailed');
     }
 };
 

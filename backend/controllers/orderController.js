@@ -3,7 +3,7 @@ import Order from '../models/Order.js';
 // @desc    Create new order
 // @route   POST /api/orders
 export const createOrder = async (req, res) => {
-    const { orderItems, shippingAddress, deliveryDate, paymentMethod, totalPrice, isPaid, paymentResult } = req.body;
+    const { orderItems, address, community, deliveryDate, paymentMethod, totalPrice, isPaid, paymentResult } = req.body;
 
     if (orderItems && orderItems.length === 0) {
         return res.status(400).json({ message: 'No order items' });
@@ -13,7 +13,8 @@ export const createOrder = async (req, res) => {
         const order = new Order({
             orderItems,
             user: req.user._id,
-            shippingAddress,
+            address,
+            community,
             deliveryDate,
             paymentMethod,
             totalPrice,
@@ -74,6 +75,14 @@ export const updateOrderStatus = async (req, res) => {
                     orderId: updatedOrder._id,
                     status: updatedOrder.status
                 });
+
+                if (updatedOrder.status === 'cancelled') {
+                    io.emit('orderCancelled', {
+                        orderId: updatedOrder._id,
+                        totalAmount: updatedOrder.totalPrice,
+                        community: updatedOrder.community
+                    });
+                }
             }
 
             res.json(updatedOrder);
@@ -100,6 +109,11 @@ export const cancelOrder = async (req, res) => {
                 io.emit('orderStatusUpdated', {
                     orderId: updatedOrder._id,
                     status: updatedOrder.status
+                });
+                io.emit('orderCancelled', {
+                    orderId: updatedOrder._id,
+                    totalAmount: updatedOrder.totalPrice,
+                    community: updatedOrder.community
                 });
             }
 

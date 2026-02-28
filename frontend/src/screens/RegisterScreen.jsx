@@ -29,7 +29,7 @@ const RegisterScreen = () => {
                     });
                     login(data);
                     if (data.role === 'admin') {
-                        navigate('/admin/dashboard');
+                        navigate('/admin');
                     } else {
                         navigate('/');
                     }
@@ -45,7 +45,7 @@ const RegisterScreen = () => {
         // Redirect if already logged in natively
         if (user && !location.search.includes('token')) {
             if (user.role === 'admin') {
-                navigate('/admin/dashboard');
+                navigate('/admin');
             } else {
                 navigate('/');
             }

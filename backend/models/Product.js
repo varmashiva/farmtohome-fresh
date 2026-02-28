@@ -5,14 +5,12 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    description: {
-        type: String,
-        required: true,
-    },
-    imageUrl: {
-        type: String,
-        required: true,
-    },
+    images: [
+        {
+            url: { type: String, required: true },
+            publicId: { type: String, required: true }
+        }
+    ],
     marketPrice: {
         type: Number,
         required: true,
@@ -23,15 +21,28 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
-    sellingPrice: {
-        type: Number,
-        required: true,
-    },
-    stockStatus: {
-        type: String,
-        enum: ['inStock', 'outOfStock'],
-        default: 'inStock',
-    }
+    sizes: [
+        {
+            size: {
+                type: String,
+                enum: ['Small', 'Medium', 'Large'],
+                required: true
+            },
+            price: {
+                type: Number,
+                required: true
+            },
+            stockStatus: {
+                type: String,
+                enum: ['inStock', 'outOfStock'],
+                default: 'inStock'
+            },
+            description: {
+                type: String,
+                default: ''
+            }
+        }
+    ]
 }, { timestamps: true });
 
 export default mongoose.model('Product', productSchema);

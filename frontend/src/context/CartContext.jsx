@@ -1,86 +1,151 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import api from '../utils/api';
+import { SocketContext } from './SocketContext';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
+    const { socket } = useContext(SocketContext);
 
-    useEffect(() => {
-        const items = localStorage.getItem('cartItems');
-        if (items) {
-            setCartItems(JSON.parse(items));
+    const fetchCart = useCallback(async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            setCartItems([]);
+            return;
+        }
+
+        try {
+            const { data } = await api.get('/cart');
+            setCartItems(data.items || []);
+        } catch (error) {
+            console.error('Failed to fetch user cart from DB:', error);
+            setCartItems([]);
         }
     }, []);
 
-    // Helper: Push current local items up to the DB if the user is authenticated
-    const syncToDB = async (itemsArray) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            try {
-                // Background sync, no need to await/block the UI
-                api.put('/users/cart', { cartItems: itemsArray });
-            } catch (error) {
-                console.error('Failed to sync cart to cloud:', error);
-            }
-        }
-    };
+    // Live stock update listener for items inside the cart
+    useEffect(() => {
+        if (!socket) return;
 
-    // Called by AuthContext.jsx immediately upon successful login/hydration
-    const hydrateCartFromDB = (dbItems) => {
-        if (!dbItems || dbItems.length === 0) return;
+        const handleStockUpdate = async (data) => {
+            // 1️⃣ Instant UI update (optimistic)
+            setCartItems(prevItems =>
+                prevItems.map(item => {
+                    const itemProductId =
+                        typeof item.product === "object"
+                            ? item.product._id
+                            : item.product;
 
-        // Merge strategy: DB items overwrite local ones if there's a conflict
-        const localItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+                    if (String(itemProductId) !== String(data.productId)) {
+                        return item;
+                    }
 
-        // Build a map for easy resolution
-        const mergedMap = new Map();
-        localItems.forEach(item => mergedMap.set(item.product, item));
-        dbItems.forEach(item => mergedMap.set(item.product, item)); // DB overwrites local
+                    // Whole product out of stock
+                    if (data.overallStockStatus === "outOfStock") {
+                        return {
+                            ...item,
+                            stockStatus: "outOfStock",
+                            overallStockStatus: "outOfStock"
+                        };
+                    }
 
-        const mergedArray = Array.from(mergedMap.values());
-        setCartItems(mergedArray);
-        localStorage.setItem('cartItems', JSON.stringify(mergedArray));
-        syncToDB(mergedArray); // Save the merged result back up
-    };
+                    // Specific size update
+                    if (String(item.size) === String(data.size)) {
+                        return {
+                            ...item,
+                            stockStatus: data.stockStatus,
+                            overallStockStatus: data.overallStockStatus
+                        };
+                    }
 
-    const addToCart = (product, qty) => {
-        const existItem = cartItems.find((x) => x.product === product._id);
-        let newCartItems;
-
-        if (existItem) {
-            newCartItems = cartItems.map((x) =>
-                x.product === existItem.product ? { ...x, quantity: x.quantity + qty } : x
+                    // Product back in stock (reset overall flag)
+                    return {
+                        ...item,
+                        overallStockStatus: data.overallStockStatus
+                    };
+                })
             );
-        } else {
-            newCartItems = [...cartItems, {
-                name: product.name,
-                quantity: qty,
-                imageUrl: product.imageUrl || product.image,
-                price: product.sellingPrice,
-                product: product._id
-            }];
+
+            // 2️⃣ Ensure backend truth (prevents stale state bug)
+            await fetchCart();
+        };
+
+        socket.on("sizeStockUpdated", handleStockUpdate);
+
+        return () => {
+            socket.off("sizeStockUpdated", handleStockUpdate);
+        };
+    }, [socket, fetchCart]);
+
+
+    // Load cart on initial render
+    useEffect(() => {
+        fetchCart();
+    }, [fetchCart]);
+
+    const addToCart = async (product, selectedSize, price, qty) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in to add items to your cart.');
+            return;
         }
-        setCartItems(newCartItems);
-        localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-        syncToDB(newCartItems);
+        try {
+            const payload = {
+                product: product._id,
+                name: product.name,
+                image: product.images?.[0]?.url || product.image,
+                size: selectedSize,
+                price: price,
+                quantity: qty
+            };
+            const { data } = await api.post('/cart/add', payload);
+            setCartItems(data?.items || []);
+        } catch (error) {
+            console.error('Failed to add item to cloud cart:', error);
+        }
     };
 
-    const removeFromCart = (id) => {
-        const newCartItems = cartItems.filter((x) => x.product !== id);
-        setCartItems(newCartItems);
-        localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-        syncToDB(newCartItems);
+    const updateCartQty = async (productId, selectedSize, newQty) => {
+        if (newQty <= 0) {
+            await removeFromCart(productId, selectedSize);
+            return;
+        }
+        try {
+            const { data } = await api.put('/cart/update', {
+                product: productId,
+                size: selectedSize,
+                quantity: newQty
+            });
+            setCartItems(data?.items || []);
+        } catch (error) {
+            console.error('Failed to update cloud cart qty:', error);
+        }
     };
 
-    const clearCart = () => {
-        setCartItems([]);
-        localStorage.removeItem('cartItems');
-        syncToDB([]);
+    const removeFromCart = async (productId, selectedSize) => {
+        try {
+            const { data } = await api.delete('/cart/remove', {
+                data: { product: productId, size: selectedSize }
+            });
+            setCartItems(data?.items || []);
+        } catch (error) {
+            console.error('Failed to remove item from cloud cart:', error);
+        }
+    };
+
+    const clearCart = async () => {
+        try {
+            await api.delete('/cart/clear');
+            setCartItems([]);
+        } catch (error) {
+            console.error('Failed to clear cloud cart:', error);
+        }
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, hydrateCartFromDB }}>
+        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, fetchCart, updateCartQty }}>
             {children}
         </CartContext.Provider>
     );

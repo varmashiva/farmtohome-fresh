@@ -51,8 +51,8 @@ const AdminDashboard = () => {
                 setStats(prev => {
                     let comm1 = prev.comm1Rev;
                     let comm2 = prev.comm2Rev;
-                    if (newOrder.shippingAddress.community === 'Community 1') comm1 += newOrder.totalPrice;
-                    if (newOrder.shippingAddress.community === 'Community 2') comm2 += newOrder.totalPrice;
+                    if (newOrder.community === 'Community 1') comm1 += newOrder.totalPrice;
+                    if (newOrder.community === 'Community 2') comm2 += newOrder.totalPrice;
 
                     return {
                         totalOrders: prev.totalOrders + 1,
@@ -62,10 +62,33 @@ const AdminDashboard = () => {
                     };
                 });
             });
+
+            socket.on('orderCancelled', (data) => {
+                // Instantly sync the local table to reflect cancellation
+                setOrders(prev => prev.map(o => o._id === data.orderId ? { ...o, status: 'cancelled' } : o));
+
+                // Subtract revenue matching backend logic natively
+                setStats(prev => {
+                    let comm1 = prev.comm1Rev;
+                    let comm2 = prev.comm2Rev;
+                    if (data.community === 'Community 1') comm1 -= data.totalAmount;
+                    if (data.community === 'Community 2') comm2 -= data.totalAmount;
+
+                    return {
+                        totalOrders: Math.max(0, prev.totalOrders - 1),
+                        totalRevenue: Math.max(0, prev.totalRevenue - data.totalAmount),
+                        comm1Rev: Math.max(0, comm1),
+                        comm2Rev: Math.max(0, comm2)
+                    };
+                });
+            });
         }
 
         return () => {
-            if (socket) socket.off('orderCreated');
+            if (socket) {
+                socket.off('orderCreated');
+                socket.off('orderCancelled');
+            }
         };
     }, [user, navigate, socket]);
 
@@ -128,8 +151,8 @@ const AdminDashboard = () => {
                                     )}
                                     {new Date(order.createdAt).toLocaleTimeString()}
                                 </td>
-                                <td className="p-4 font-semibold">{order.shippingAddress.name}</td>
-                                <td className="p-4">{order.shippingAddress.community}</td>
+                                <td className="p-4 font-semibold">{order.address?.fullName}</td>
+                                <td className="p-4">{order.community}</td>
                                 <td className="p-4 font-bold text-green-300">₹{order.totalPrice}</td>
                                 <td className="p-4">
                                     <span className={`px-3 py-1 text-xs font-bold rounded-full ${order.status === 'Pending' ? 'bg-orange-500/20 text-orange-400' :

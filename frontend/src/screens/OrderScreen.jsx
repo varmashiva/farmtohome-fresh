@@ -59,11 +59,11 @@ const OrderScreen = () => {
                         <div>
                             <h2 className="text-xl font-bold mb-3 text-accent border-b border-white/20 pb-1 w-fit">Shipping Address</h2>
                             <p className="leading-relaxed">
-                                <span className="font-semibold block">{order.shippingAddress.name}</span>
-                                {order.shippingAddress.address}<br />
-                                {order.shippingAddress.city}, {order.shippingAddress.pincode}<br />
-                                <span className="font-semibold">{order.shippingAddress.community}</span><br />
-                                Phone: {order.shippingAddress.phoneNumber}
+                                <span className="font-semibold block">{order.address?.fullName}</span>
+                                {order.address?.house}<br />
+                                <span className="font-semibold">{order.community}</span><br />
+                                Phone: {order.address?.phone}
+                                {order.address?.alternatePhone && ` | Alt: ${order.address?.alternatePhone}`}
                             </p>
                             <p className="mt-3 font-bold text-green-300">
                                 Expected Delivery: {order.deliveryDate}

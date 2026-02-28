@@ -1,11 +1,23 @@
 import Product from '../models/Product.js';
 
+// Helper to compute overallStockStatus dynamically
+const computeOverallStockStatus = (product) => {
+    if (!product.sizes || product.sizes.length === 0) return 'outOfStock';
+    return product.sizes.some(size => size.stockStatus === 'inStock') ? 'inStock' : 'outOfStock';
+};
+
 // @desc    Fetch all products
 // @route   GET /api/products
 export const getProducts = async (req, res) => {
     try {
         const products = await Product.find({});
-        res.json(products);
+        // Append dynamically computed overallStockStatus
+        const formattedProducts = products.map(product => {
+            const p = product.toObject();
+            p.overallStockStatus = computeOverallStockStatus(p);
+            return p;
+        });
+        res.json(formattedProducts);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -17,7 +29,9 @@ export const getProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (product) {
-            res.json(product);
+            const p = product.toObject();
+            p.overallStockStatus = computeOverallStockStatus(p);
+            res.json(p);
         } else {
             res.status(404).json({ message: 'Product not found' });
         }
@@ -26,31 +40,42 @@ export const getProductById = async (req, res) => {
     }
 };
 
-// @desc    Update product price (marketPrice & margin -> sellingPrice)
-// @route   PUT /api/products/:id/update-price
-export const updateProductPrice = async (req, res) => {
-    const { marketPrice, margin } = req.body;
+// @desc    Update specific size
+// @route   PUT /api/products/:id/size
+export const updateProductSize = async (req, res) => {
+    const { size, price, stockStatus, description } = req.body;
 
     try {
         const product = await Product.findById(req.params.id);
 
         if (product) {
-            product.marketPrice = marketPrice !== undefined ? marketPrice : product.marketPrice;
-            product.margin = margin !== undefined ? margin : product.margin;
-            product.sellingPrice = product.marketPrice + product.margin;
+            const sizeItem = product.sizes.find(s => s.size === size);
+            if (sizeItem) {
+                if (price !== undefined) sizeItem.price = price;
+                if (stockStatus !== undefined) sizeItem.stockStatus = stockStatus;
+                if (description !== undefined) sizeItem.description = description;
 
-            const updatedProduct = await product.save();
+                const updatedProduct = await product.save();
+                const p = updatedProduct.toObject();
+                p.overallStockStatus = computeOverallStockStatus(p);
 
-            // Emit socket event for real-time update
-            const io = req.app.get('io');
-            io.emit('priceUpdated', {
-                productId: updatedProduct._id,
-                newPrice: updatedProduct.sellingPrice,
-                marketPrice: updatedProduct.marketPrice,
-                margin: updatedProduct.margin
-            });
+                // Emit unified socket event for real-time update
+                const io = req.app.get('io');
+                if (io) {
+                    io.emit('sizeStockUpdated', {
+                        productId: p._id.toString(),
+                        size: size.toString(),
+                        price: sizeItem.price,
+                        stockStatus: sizeItem.stockStatus ? sizeItem.stockStatus.toString() : 'inStock',
+                        description: sizeItem.description,
+                        overallStockStatus: p.overallStockStatus ? p.overallStockStatus.toString() : 'inStock'
+                    });
+                }
 
-            res.json(updatedProduct);
+                res.json(p);
+            } else {
+                res.status(404).json({ message: 'Size not found in product' });
+            }
         } else {
             res.status(404).json({ message: 'Product not found' });
         }
@@ -63,16 +88,18 @@ export const updateProductPrice = async (req, res) => {
 // @route   POST /api/products
 export const createProduct = async (req, res) => {
     try {
-        const { name, imageUrl, description, marketPrice, margin, stockStatus } = req.body;
+        const { name, images, marketPrice, margin, sizes } = req.body;
 
         const product = new Product({
             name: name || 'Sample name',
-            imageUrl: imageUrl || 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg', // Safe fallback
-            description: description || 'Sample description',
+            images: images || [],
             marketPrice: marketPrice || 0,
             margin: margin || 0,
-            sellingPrice: (marketPrice || 0) + (margin || 0),
-            stockStatus: stockStatus || 'inStock'
+            sizes: sizes || [
+                { size: 'Small', price: 0, stockStatus: 'inStock', description: 'Small size' },
+                { size: 'Medium', price: 0, stockStatus: 'inStock', description: 'Medium size' },
+                { size: 'Large', price: 0, stockStatus: 'inStock', description: 'Large size' }
+            ]
         });
 
         const createdProduct = await product.save();
@@ -91,36 +118,23 @@ export const createProduct = async (req, res) => {
 // @desc    Update a product
 // @route   PUT /api/products/:id
 export const updateProduct = async (req, res) => {
-    const { name, imageUrl, description, marketPrice, margin, stockStatus } = req.body;
+    const { name, images, marketPrice, margin, sizes } = req.body;
 
     try {
         const product = await Product.findById(req.params.id);
 
         if (product) {
             product.name = name || product.name;
-            product.imageUrl = imageUrl || product.imageUrl;
-            product.description = description || product.description;
+            if (images) product.images = images;
 
             if (marketPrice !== undefined) product.marketPrice = marketPrice;
             if (margin !== undefined) product.margin = margin;
-            product.sellingPrice = product.marketPrice + product.margin;
-
-            if (stockStatus) product.stockStatus = stockStatus;
+            if (sizes) product.sizes = sizes;
 
             const updatedProduct = await product.save();
 
             const io = req.app.get('io');
             if (io) {
-                // Emit targeted price update
-                if (marketPrice !== undefined || margin !== undefined) {
-                    io.emit('priceUpdated', {
-                        productId: updatedProduct._id,
-                        newPrice: updatedProduct.sellingPrice,
-                        marketPrice: updatedProduct.marketPrice,
-                        margin: updatedProduct.margin
-                    });
-                }
-
                 // Emit raw product data structural update
                 io.emit('productUpdated', updatedProduct);
             }
@@ -157,17 +171,65 @@ export const deleteProduct = async (req, res) => {
     }
 };
 
-// @desc    Mark product Out of Stock / In Stock
-// @route   PUT /api/products/:id/out-of-stock
-export const updateStockStatus = async (req, res) => {
+import cloudinary from '../config/cloudinary.js';
+
+// @desc    Add new images to existing product
+// @route   PUT /api/products/:id/add-images
+export const addProductImage = async (req, res) => {
+    const { newImages } = req.body; // Expect array: [{ url, publicId }]
+
     try {
         const product = await Product.findById(req.params.id);
-
-        if (product) {
-            // Toggle or explicitly set if provided in body. 
-            // Defaulting toggle behavior for an isolated button
-            product.stockStatus = product.stockStatus === 'inStock' ? 'outOfStock' : 'inStock';
+        if (product && newImages && newImages.length > 0) {
+            if (!product.images) {
+                product.images = [];
+            }
+            product.images.push(...newImages);
             const updatedProduct = await product.save();
+
+            const io = req.app.get('io');
+            if (io) {
+                io.emit('productUpdated', updatedProduct);
+            }
+            res.json(updatedProduct);
+        } else {
+            res.status(404).json({ message: 'Product not found or invalid images payload' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Remove an image from a product
+// @route   DELETE /api/products/:id/remove-image
+export const removeProductImage = async (req, res) => {
+    const { publicId } = req.body;
+
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            // Delete from cloudinary
+            if (publicId) {
+                try {
+                    await cloudinary.uploader.destroy(publicId);
+                } catch (cloudinaryError) {
+                    console.error('Failed to delete image from Cloudinary:', cloudinaryError);
+                    // Continue dropping it from the database anyway to avoid ghost artifacts
+                }
+            }
+
+            // Pull image from Mongo array
+            if (product.images) {
+                product.images = product.images.filter((img) => img.publicId !== publicId);
+            } else {
+                product.images = [];
+            }
+            const updatedProduct = await product.save();
+
+            const io = req.app.get('io');
+            if (io) {
+                io.emit('productUpdated', updatedProduct);
+            }
             res.json(updatedProduct);
         } else {
             res.status(404).json({ message: 'Product not found' });

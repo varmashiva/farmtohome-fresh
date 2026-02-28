@@ -8,12 +8,12 @@ import { SocketProvider } from './context/SocketContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CartProvider>
-      <AuthProvider>
-        <SocketProvider>
+    <SocketProvider>
+      <CartProvider>
+        <AuthProvider>
           <App />
-        </SocketProvider>
-      </AuthProvider>
-    </CartProvider>
+        </AuthProvider>
+      </CartProvider>
+    </SocketProvider>
   </React.StrictMode>,
 )

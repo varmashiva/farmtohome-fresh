@@ -6,8 +6,9 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
-    updateStockStatus,
-    updateProductPrice
+    updateProductSize,
+    addProductImage,
+    removeProductImage
 } from '../controllers/productController.js';
 
 const router = express.Router();
@@ -21,10 +22,13 @@ router.route('/:id')
     .put(protect, admin, updateProduct)
     .delete(protect, admin, deleteProduct);
 
-router.route('/:id/out-of-stock')
-    .put(protect, admin, updateStockStatus);
+router.route('/:id/size')
+    .put(protect, admin, updateProductSize);
 
-router.route('/:id/update-price')
-    .put(protect, admin, updateProductPrice);
+router.route('/:id/add-images')
+    .put(protect, admin, addProductImage);
+
+router.route('/:id/remove-image')
+    .delete(protect, admin, removeProductImage);
 
 export default router;

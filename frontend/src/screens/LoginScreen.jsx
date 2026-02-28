@@ -29,7 +29,7 @@ const LoginScreen = () => {
                     });
                     login(data);
                     if (data.role === 'admin') {
-                        navigate('/admin/dashboard');
+                        navigate('/admin');
                     } else {
                         navigate('/');
                     }
@@ -44,8 +44,11 @@ const LoginScreen = () => {
     useEffect(() => {
         // Redirect if already logged in natively
         if (user && !location.search.includes('token')) {
-            if (user.role === 'admin') {
-                navigate('/admin/dashboard');
+            const redirect = new URLSearchParams(location.search).get('redirect');
+            if (redirect) {
+                navigate(`/${redirect}`);
+            } else if (user.role === 'admin') {
+                navigate('/admin');
             } else {
                 navigate('/');
             }
@@ -57,8 +60,11 @@ const LoginScreen = () => {
         try {
             const { data } = await api.post('/auth/login', { email, password });
             login(data);
-            if (data.role === 'admin') {
-                navigate('/admin/dashboard');
+            const redirect = new URLSearchParams(location.search).get('redirect');
+            if (redirect) {
+                navigate(`/${redirect}`);
+            } else if (data.role === 'admin') {
+                navigate('/admin');
             } else {
                 navigate('/');
             }

@@ -9,7 +9,10 @@ export const getRevenueStats = async (req, res) => {
         // Aggregate total revenue and split by community
         const aggregateData = await Order.aggregate([
             {
-                $match: { isPaid: true } // Only count paid orders
+                $match: {
+                    isPaid: true,
+                    status: { $ne: 'cancelled' }
+                }
             },
             {
                 $group: {
@@ -21,7 +24,7 @@ export const getRevenueStats = async (req, res) => {
         ]);
 
         let totalRevenue = 0;
-        let totalOrders = await Order.countDocuments({}); // Count all orders (paid or unpaid)
+        let totalOrders = await Order.countDocuments({ status: { $ne: 'cancelled' } }); // Exclude cancelled from total count
         let community1Revenue = 0;
         let community2Revenue = 0;
 

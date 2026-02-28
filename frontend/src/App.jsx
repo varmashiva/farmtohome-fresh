@@ -10,10 +10,12 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import CartScreen from './screens/CartScreen';
 import AddressScreen from './screens/AddressScreen';
+import DeliveryScreen from './screens/DeliveryScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AuthSuccessScreen from './screens/AuthSuccessScreen';
+import { PaymentSuccessScreen, PaymentFailedScreen } from './screens/PaymentStatusScreens';
 import AdminDashboard from './screens/admin/AdminDashboard';
 import ProductListScreen from './screens/admin/ProductListScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
@@ -35,8 +37,11 @@ function App() {
 
             {/* Protected Customer Routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/shipping" element={<AddressScreen />} />
+              <Route path="/checkout/address" element={<AddressScreen />} />
+              <Route path="/checkout/delivery" element={<DeliveryScreen />} />
               <Route path="/payment" element={<PaymentScreen />} />
+              <Route path="/checkout/success" element={<PaymentSuccessScreen />} />
+              <Route path="/checkout/failed" element={<PaymentFailedScreen />} />
               <Route path="/order/:id" element={<OrderScreen />} />
               <Route path="/profile" element={<ProfileScreen />} />
             </Route>

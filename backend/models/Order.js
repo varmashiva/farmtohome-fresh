@@ -12,6 +12,7 @@ const orderSchema = new mongoose.Schema({
             quantity: { type: Number, required: true },
             image: { type: String, required: true },
             price: { type: Number, required: true },
+            size: { type: String, required: true },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
@@ -19,18 +20,16 @@ const orderSchema = new mongoose.Schema({
             },
         },
     ],
+    address: {
+        fullName: { type: String, required: true },
+        phone: { type: String, required: true },
+        alternatePhone: { type: String, required: false },
+        house: { type: String, required: true },
+    },
     community: {
         type: String,
         required: true,
         enum: ['Community 1', 'Community 2']
-    },
-    shippingAddress: {
-        name: { type: String, required: true },
-        phoneNumber: { type: String, required: true },
-        address: { type: String, required: true },
-        city: { type: String, required: true },
-        pincode: { type: String, required: true },
-        community: { type: String, required: true, enum: ['Community 1', 'Community 2'] },
     },
     deliveryDate: {
         type: String, // '24 hours' or specific ISODate string

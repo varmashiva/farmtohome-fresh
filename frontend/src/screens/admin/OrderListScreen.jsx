@@ -48,7 +48,7 @@ const OrderListScreen = () => {
 
     const filteredOrders = orders.filter(o => {
         if (filter === 'All') return true;
-        return o.shippingAddress.community === filter;
+        return o.community === filter;
     });
 
     return (
@@ -88,10 +88,10 @@ const OrderListScreen = () => {
                                         <span>{new Date(order.createdAt).toLocaleDateString()}</span>
                                     </td>
                                     <td className="p-4">
-                                        <span className="block font-bold mb-1">{order.shippingAddress.name}</span>
-                                        <span className="text-sm opacity-80">{order.shippingAddress.phoneNumber}</span>
+                                        <span className="block font-bold mb-1">{order.address?.fullName}</span>
+                                        <span className="text-sm opacity-80">{order.address?.phone}</span>
                                     </td>
-                                    <td className="p-4">{order.shippingAddress.community}</td>
+                                    <td className="p-4">{order.community}</td>
                                     <td className="p-4 font-semibold text-green-300">{order.deliveryDate}</td>
                                     <td className="p-4 font-bold text-lg">₹{order.totalPrice}</td>
                                     <td className="p-4">

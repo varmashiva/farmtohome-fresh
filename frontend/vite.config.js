@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5005',
+        target: 'https://fresh-prowns.onrender.com',
         changeOrigin: true
       }
     }

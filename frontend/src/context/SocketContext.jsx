@@ -3,7 +3,7 @@ import { io } from 'socket.io-client';
 
 export const SocketContext = createContext();
 
-export const socket = io('http://localhost:5005', {
+export const socket = io('https://fresh-prowns.onrender.com', {
     withCredentials: true,
     transports: ['websocket'],
     autoConnect: false // Connect manually on mount to avoid duplicate active listeners

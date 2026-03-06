@@ -47,7 +47,9 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/communities', communityRoutes);
-
+app.get("/",(req,res)=>{
+    res.send("Hello Fresh Prowns!");
+})
 // In-memory store for active administrators monitoring active sockets
 export const onlineUsers = new Map();
 

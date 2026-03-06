@@ -74,7 +74,7 @@ const LoginScreen = () => {
     };
 
     const googleLoginHandler = () => {
-        window.location.href = 'http://localhost:5005/api/auth/google';
+        window.location.href = 'https://fresh-prowns.onrender.com/api/auth/google';
     };
 
     return (
@@ -83,7 +83,7 @@ const LoginScreen = () => {
             <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.03]" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"3\" stitchTiles=\"stitch\"/>%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/>%3C/svg%3E')" }}></div>
 
             <div className="w-full max-w-md relative z-10 px-6">
-                
+
                 <div className="mb-10 w-full">
                     <span className="text-[11px] md:text-[13px] font-[600] tracking-widest text-[#666] block mb-2 uppercase font-mono text-center">
                         (Authentication)
@@ -96,7 +96,7 @@ const LoginScreen = () => {
                 <div className="bg-[#0c0c0c] border border-[#1a1a1a] rounded-[16px] p-8 md:p-10 relative overflow-hidden">
                     {/* Inner Noise */}
                     <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.05]" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"3\" stitchTiles=\"stitch\"/>%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/>%3C/svg%3E')" }}></div>
-                    
+
                     <form onSubmit={submitHandler} className="space-y-6 relative z-10 w-full flex flex-col items-center">
                         <div className="w-full">
                             <label className="block text-[11px] text-[#777] font-[600] tracking-widest uppercase font-mono mb-2">Email Address</label>

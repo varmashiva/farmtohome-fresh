@@ -43,7 +43,7 @@ export const getProductById = async (req, res) => {
 // @desc    Update specific size
 // @route   PUT /api/products/:id/size
 export const updateProductSize = async (req, res) => {
-    const { size, price, stockStatus, description } = req.body;
+    const { size, price, stockStatus, description, images } = req.body;
 
     try {
         const product = await Product.findById(req.params.id);
@@ -54,6 +54,7 @@ export const updateProductSize = async (req, res) => {
                 if (price !== undefined) sizeItem.price = price;
                 if (stockStatus !== undefined) sizeItem.stockStatus = stockStatus;
                 if (description !== undefined) sizeItem.description = description;
+                if (images !== undefined) sizeItem.images = images;
 
                 const updatedProduct = await product.save();
                 const p = updatedProduct.toObject();

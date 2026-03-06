@@ -26,3 +26,12 @@ export const admin = (req, res, next) => {
         res.status(401).json({ message: 'Not authorized as an admin' });
     }
 };
+
+export const captain = (req, res, next) => {
+    const captainEmails = ['farmtohome666@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com'];
+    if (req.user && (req.user.role === 'admin' || captainEmails.includes(req.user.email))) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as a delivery captain' });
+    }
+};

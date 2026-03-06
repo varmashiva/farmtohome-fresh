@@ -2,26 +2,26 @@ import { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const { cartItems } = useContext(CartContext);
     const navigate = useNavigate();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const handleLogout = () => {
         logout();
-        setIsDropdownOpen(false);
+        setIsMenuOpen(false);
         navigate('/login');
     };
 
-    // Close dropdown on click outside
+    // Close menu on click outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
+                setIsMenuOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -29,50 +29,74 @@ const Navbar = () => {
     }, []);
 
     return (
-        <header className="sticky top-0 z-50 p-4">
-            <div className="container mx-auto glass-card flex justify-between items-center p-4">
-                <Link to="/" className="text-2xl font-bold tracking-wider hover:text-accent transition duration-300">
-                    Fresh Prawns
+        <header className="fixed top-0 left-0 w-full z-50 px-10 md:px-16 pt-8 pb-4 animate-fade-in-down pointer-events-none">
+            {/* The pointer-events-none on header prevents the transparent space from blocking clicks on the video underneath. 
+                We restore pointer-events-auto on the actual links/buttons. */}
+            <div className="flex justify-between items-center w-full">
+
+                {/* Left Side: FTH */}
+                <Link
+                    to="/"
+                    className="pointer-events-auto text-[18px] md:text-[22px] font-medium tracking-[0.2em] text-white uppercase hover:opacity-80 transition-opacity duration-300 drop-shadow-md"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                    FTH
                 </Link>
 
-                <nav className="flex items-center space-x-6">
-                    <Link to="/cart" className="relative hover:text-accent transition duration-300 flex items-center">
-                        <FaShoppingCart className="text-xl" />
-                        {cartItems.length > 0 && (
-                            <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
-                                {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
-                            </span>
-                        )}
+                {/* Right Side: CART & MENU */}
+                <div className="flex items-center gap-6 md:gap-8 pointer-events-auto">
+                    <Link
+                        to="/cart"
+                        className="text-[16px] md:text-[18px] text-white hover:opacity-70 transition-opacity duration-300 drop-shadow-md flex items-center gap-1.5"
+                    >
+                        <FaShoppingCart />
+                        {cartItems.length > 0 && <span className="text-[12px] opacity-70 shrink-0 font-semibold tracking-[0.1em]">({cartItems.length})</span>}
                     </Link>
 
-                    {user ? (
-                        <div className="relative" ref={dropdownRef}>
-                            <button
-                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="flex items-center space-x-2 hover:text-accent transition duration-300"
-                            >
-                                <FaUser />
-                                <span>{user.name}</span>
-                            </button>
+                    {/* MENU (and Dropdown) */}
+                    <div className="relative" ref={dropdownRef}>
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="text-[12px] md:text-[14px] font-semibold tracking-[0.2em] text-white uppercase hover:opacity-70 transition-opacity duration-300 drop-shadow-md"
+                        >
+                            MENU
+                        </button>
 
-                            {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 glass-card transition duration-300 shadow-xl border border-white/20">
-                                    <Link to="/profile" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-3 hover:bg-white/10 transition">Profile</Link>
-                                    {user.role === 'admin' && (
-                                        <Link to="/admin" onClick={() => setIsDropdownOpen(false)} className="block px-4 py-3 hover:bg-white/10 transition">Dashboard</Link>
-                                    )}
-                                    <button onClick={handleLogout} className="block w-full text-left px-4 py-3 hover:bg-white/10 transition text-red-300">
-                                        Logout
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <Link to="/login" className="glass-button px-6 py-2 rounded-full font-semibold hover:text-accent">
-                            Login
-                        </Link>
-                    )}
-                </nav>
+                        {/* Minimalist Dropdown Menu */}
+                        {isMenuOpen && (
+                            <div className="absolute right-0 mt-4 w-56 bg-black/90 backdrop-blur-md border border-white/10 p-6 flex flex-col gap-4 text-xs font-semibold tracking-[0.15em] uppercase text-white shadow-2xl origin-top-right animate-fade-in z-50">
+                                <Link to="/" onClick={() => setIsMenuOpen(false)} className="hover:text-gray-400 transition-colors">Home</Link>
+
+                                {user ? (
+                                    <>
+                                        <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="hover:text-gray-400 transition-colors">Profile</Link>
+
+                                        {(user.role === 'admin' || ['farmtohome666@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com'].includes(user.email)) && (
+                                            <Link
+                                                to="/captain"
+                                                onClick={() => setIsMenuOpen(false)}
+                                                className="hover:text-amber-300 transition-colors text-amber-500"
+                                            >
+                                                Captain
+                                            </Link>
+                                        )}
+
+                                        {user.role === 'admin' && (
+                                            <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="hover:text-gray-400 transition-colors text-blue-300">Admin</Link>
+                                        )}
+                                        <button onClick={handleLogout} className="text-left text-red-400 hover:text-red-300 transition-colors mt-4 pt-4 border-t border-white/10 uppercase tracking-[0.15em]">
+                                            Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <Link to="/login" onClick={() => setIsMenuOpen(false)} className="hover:text-gray-400 transition-colors">
+                                        Login
+                                    </Link>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </header>
     );

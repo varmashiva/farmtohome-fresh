@@ -25,11 +25,11 @@ const orderSchema = new mongoose.Schema({
         phone: { type: String, required: true },
         alternatePhone: { type: String, required: false },
         house: { type: String, required: true },
+        towerNumber: { type: String, required: true }
     },
     community: {
         type: String,
-        required: true,
-        enum: ['Community 1', 'Community 2']
+        required: true
     },
     deliveryDate: {
         type: String, // '24 hours' or specific ISODate string

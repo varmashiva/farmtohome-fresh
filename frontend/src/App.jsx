@@ -20,13 +20,15 @@ import AdminDashboard from './screens/admin/AdminDashboard';
 import ProductListScreen from './screens/admin/ProductListScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
 import UserListScreen from './screens/admin/UserListScreen';
+import CommunityListScreen from './screens/admin/CommunityListScreen';
+import CaptainDashboardScreen from './screens/admin/CaptainDashboardScreen';
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-8">
+        <main className="flex-grow pb-8">
           <Routes>
             <Route path="/" element={<HomeScreen />} />
             <Route path="/product/:id" element={<ProductScreen />} />
@@ -52,7 +54,14 @@ function App() {
               <Route path="/admin/products" element={<ProductListScreen />} />
               <Route path="/admin/orders" element={<OrderListScreen />} />
               <Route path="/admin/users" element={<UserListScreen />} />
+              <Route path="/admin/communities" element={<CommunityListScreen />} />
             </Route>
+
+            {/* Captain Route */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/captain" element={<CaptainDashboardScreen />} />
+            </Route>
+
           </Routes>
         </main>
         <Footer />

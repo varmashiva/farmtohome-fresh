@@ -88,7 +88,7 @@ const getOAuthClient = () => {
         oAuth2Client = new OAuth2Client(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            'http://localhost:5173/api/auth/google/callback'
+            'https://fresh-prowns.onrender.com/api/auth/google/callback'
         );
     }
     return oAuth2Client;
@@ -161,11 +161,11 @@ export const googleCallback = async (req, res) => {
         const token = generateToken(user._id);
 
         // Redirect back to frontend with the token explicitly
-        res.redirect(`http://localhost:5173/auth-success?token=${token}`);
+        res.redirect(`https://farmtohome-fresh.vercel.app/auth-success?token=${token}`);
 
     } catch (error) {
         console.error('Google Auth Error:', error);
-        res.redirect('http://localhost:5173/login?error=GoogleAuthFailed');
+        res.redirect('https://farmtohome-fresh.vercel.app/login?error=GoogleAuthFailed');
     }
 };
 

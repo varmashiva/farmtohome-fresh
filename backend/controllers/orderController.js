@@ -1,4 +1,5 @@
 import Order from '../models/Order.js';
+import { sendEmail } from '../utils/emailService.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -62,11 +63,29 @@ export const getMyOrders = async (req, res) => {
 // @route   PUT /api/orders/:id/status
 export const updateOrderStatus = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id).populate('user', 'name email');
 
         if (order) {
             order.status = req.body.status || order.status;
             const updatedOrder = await order.save();
+
+            // Fire off delivery or cancellation emails asynchronously
+            const customerEmail = order.user?.email;
+            const customerName = order.user?.name || 'Customer';
+
+            if (updatedOrder.status === 'delivered' && customerEmail) {
+                sendEmail(
+                    customerEmail,
+                    `Order Delivered - Farm to Home [${updatedOrder._id}]`,
+                    `Hi ${customerName},\n\nYour Farm to Home order ${updatedOrder._id} has been successfully delivered! Enjoy your premium seafood.`
+                );
+            } else if (updatedOrder.status === 'cancelled' && customerEmail) {
+                sendEmail(
+                    customerEmail,
+                    `Order Cancelled - Farm to Home [${updatedOrder._id}]`,
+                    `Hi ${customerName},\n\nYour Farm to Home order ${updatedOrder._id} has been cancelled. If you have any questions, please reach out to our support.`
+                );
+            }
 
             // Emit socket event for real-time status update
             const io = req.app.get('io');
@@ -98,11 +117,22 @@ export const updateOrderStatus = async (req, res) => {
 // @route   PUT /api/orders/:id/cancel
 export const cancelOrder = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id).populate('user', 'name email');
 
         if (order) {
             order.status = 'cancelled';
             const updatedOrder = await order.save();
+
+            // Fire off cancellation email asynchronously
+            const customerEmail = order.user?.email;
+            if (customerEmail) {
+                const customerName = order.user?.name || 'Customer';
+                sendEmail(
+                    customerEmail,
+                    `Order Cancelled - Farm to Home [${updatedOrder._id}]`,
+                    `Hi ${customerName},\n\nYour Farm to Home order ${updatedOrder._id} has been cancelled.`
+                );
+            }
 
             const io = req.app.get('io');
             if (io) {

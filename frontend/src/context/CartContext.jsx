@@ -92,10 +92,15 @@ export const CartProvider = ({ children }) => {
             return;
         }
         try {
+            const currentSizeData = product.sizes?.find(s => s.size === selectedSize);
+            const activeImage = (currentSizeData?.images && currentSizeData.images.length > 0)
+                ? currentSizeData.images[0].url
+                : (product.images?.[0]?.url || product.image);
+
             const payload = {
                 product: product._id,
                 name: product.name,
-                image: product.images?.[0]?.url || product.image,
+                image: activeImage,
                 size: selectedSize,
                 price: price,
                 quantity: qty

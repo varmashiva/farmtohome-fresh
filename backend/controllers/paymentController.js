@@ -1,5 +1,6 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
+import { sendEmail } from '../utils/emailService.js';
 import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
@@ -103,13 +104,14 @@ export const verifyPayment = async (req, res) => {
 
             // SECURITY: Cross-reference live stock again before finalizing the order structure!
             for (const item of items) {
-                const liveProduct = await Product.findById(item.product || item.productId || item._id);
+                const targetId = typeof item.product === 'object' ? item.product._id : (item.product || item.productId || item._id);
+                const liveProduct = await Product.findById(targetId);
                 if (!liveProduct || liveProduct.overallStockStatus === 'outOfStock') {
-                    return res.status(400).json({ success: false, message: "Order rejected. Some items became out of stock during payment." });
+                    return res.status(400).json({ success: false, message: `Order rejected. Item ${item.name} became out of stock during payment.` });
                 }
                 const liveSize = liveProduct.sizes.find(s => s.size === (item.selectedSize || item.size));
                 if (!liveSize || liveSize.stockStatus === 'outOfStock') {
-                    return res.status(400).json({ success: false, message: "Order rejected. Some items became out of stock during payment." });
+                    return res.status(400).json({ success: false, message: `Order rejected. Size ${item.selectedSize || item.size} became out of stock during payment.` });
                 }
             }
 
@@ -146,6 +148,27 @@ export const verifyPayment = async (req, res) => {
             try {
                 const createdOrder = await order.save();
 
+                // Fire off confirmation emails asynchronously
+                const customerEmail = req.user?.email;
+                const customerName = req.user?.name || 'Customer';
+                const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com'];
+
+                if (customerEmail) {
+                    sendEmail(
+                        customerEmail,
+                        `Order Confirmed - Farm to Home [${createdOrder._id}]`,
+                        `Hi ${customerName},\n\nYour Farm to Home order has been successfully placed and paid for. Your Order ID is ${createdOrder._id}. Total Amount: ₹${createdOrder.totalPrice}.\n\nThank you for choosing Farm to Home!`
+                    );
+                }
+
+                adminEmails.forEach(adminEmail => {
+                    sendEmail(
+                        adminEmail,
+                        `New Order Received - [${createdOrder._id}]`,
+                        `A new order has been placed successfully by ${customerName} (${customerEmail || 'N/A'}).\n\nOrder ID: ${createdOrder._id}\nTotal Amount: ₹${createdOrder.totalPrice}\nCommunity: ${createdOrder.community}\nStatus: ${createdOrder.status}`
+                    );
+                });
+
                 // Emit socket event for new order
                 const io = req.app.get('io');
                 if (io) io.emit('orderCreated', createdOrder);
@@ -159,7 +182,7 @@ export const verifyPayment = async (req, res) => {
                 console.error("Order Save Error:", saveError);
                 return res.status(500).json({
                     success: false,
-                    message: "Order creation failed after payment verification"
+                    message: `Order creation failed: ${saveError.message}`
                 });
             }
         } else {

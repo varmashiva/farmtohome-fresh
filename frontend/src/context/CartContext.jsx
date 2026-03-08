@@ -9,7 +9,15 @@ export const CartProvider = ({ children }) => {
     const { socket } = useContext(SocketContext);
 
     const fetchCart = useCallback(async () => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
+        if (!token) {
+            const userInfo = localStorage.getItem('userInfo');
+            if (userInfo) {
+                try {
+                    token = JSON.parse(userInfo).token;
+                } catch (e) { }
+            }
+        }
 
         if (!token) {
             setCartItems([]);
@@ -86,7 +94,15 @@ export const CartProvider = ({ children }) => {
     }, [fetchCart]);
 
     const addToCart = async (product, selectedSize, price, qty) => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
+        if (!token) {
+            const userInfo = localStorage.getItem('userInfo');
+            if (userInfo) {
+                try {
+                    token = JSON.parse(userInfo).token;
+                } catch (e) { }
+            }
+        }
         if (!token) {
             return false;
         }

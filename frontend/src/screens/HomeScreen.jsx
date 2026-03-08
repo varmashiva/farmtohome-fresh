@@ -464,13 +464,17 @@ const HomeScreen = () => {
                                             <div className="w-full">
                                                 {isOverallInStock ? (
                                                     <button
-                                                        onClick={() => {
+                                                        onClick={async () => {
                                                             const currentSize = selectedSizes[product._id] || product.sizes.find(s => s.stockStatus === 'inStock')?.size;
                                                             const currentSizeData = product.sizes.find(s => s.size === currentSize);
                                                             const finalPrice = currentSizeData ? currentSizeData.price : 0;
-                                                            addToCart(product, currentSize, finalPrice, getQty(product._id));
-                                                            navigate('/cart');
-                                                            window.location.reload();
+                                                            const success = await addToCart(product, currentSize, finalPrice, getQty(product._id));
+                                                            if (success) {
+                                                                navigate('/cart');
+                                                                window.location.reload();
+                                                            } else {
+                                                                navigate('/login');
+                                                            }
                                                         }}
                                                         className="w-full bg-[#eaeaea] hover:bg-white text-[#111] font-[900] py-[12px] md:py-[18px] rounded-[16px] text-center transition-all duration-300 transform hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2 tracking-[0.15em] uppercase text-[11px] md:text-[13px]"
                                                     >
@@ -544,7 +548,7 @@ const HomeScreen = () => {
                                     { num: '01', title: 'TIGER PRAWNS' },
                                     { num: '02', title: 'KING PRAWNS' },
                                     { num: '03', title: 'WHITELEG SHRIMP' },
-                                    { num: '04', title: 'JUMBO PRAWNS' },   
+                                    { num: '04', title: 'JUMBO PRAWNS' },
                                 ].map((item, index) => (
                                     <div
                                         key={index}

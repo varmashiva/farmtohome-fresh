@@ -90,10 +90,14 @@ const ProductScreen = () => {
     const isAvailable = stockStatus === 'inStock';
     const isOverallInStock = product.overallStockStatus === 'inStock';
 
-    const addToCartHandler = () => {
-        addToCart(product, selectedSize, currentSizeData.price, qty);
-        navigate('/cart');
-        window.location.reload();
+    const addToCartHandler = async () => {
+        const success = await addToCart(product, selectedSize, currentSizeData.price, qty);
+        if (success) {
+            navigate('/cart');
+            window.location.reload();
+        } else {
+            navigate('/login');
+        }
     };
 
     const activeImages = (currentSizeData.images && currentSizeData.images.length > 0) ? currentSizeData.images : (product.images || []);

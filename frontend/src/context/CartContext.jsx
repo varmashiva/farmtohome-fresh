@@ -9,7 +9,15 @@ export const CartProvider = ({ children }) => {
     const { socket } = useContext(SocketContext);
 
     const fetchCart = useCallback(async () => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
+        if (!token) {
+            const userInfo = localStorage.getItem('userInfo');
+            if (userInfo) {
+                try {
+                    token = JSON.parse(userInfo).token;
+                } catch (e) { }
+            }
+        }
 
         if (!token) {
             setCartItems([]);
@@ -86,10 +94,17 @@ export const CartProvider = ({ children }) => {
     }, [fetchCart]);
 
     const addToCart = async (product, selectedSize, price, qty) => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
         if (!token) {
-            alert('Please log in to add items to your cart.');
-            return;
+            const userInfo = localStorage.getItem('userInfo');
+            if (userInfo) {
+                try {
+                    token = JSON.parse(userInfo).token;
+                } catch (e) { }
+            }
+        }
+        if (!token) {
+            return false;
         }
         try {
             const currentSizeData = product.sizes?.find(s => s.size === selectedSize);
@@ -107,8 +122,10 @@ export const CartProvider = ({ children }) => {
             };
             const { data } = await api.post('/cart/add', payload);
             setCartItems(data?.items || []);
+            return true;
         } catch (error) {
             console.error('Failed to add item to cloud cart:', error);
+            return false;
         }
     };
 

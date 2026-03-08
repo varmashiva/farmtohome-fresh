@@ -38,9 +38,9 @@ const Navbar = () => {
                 {/* Left Side: FTH Logo */}
                 <Link
                     to="/"
-                    className="pointer-events-auto hover:opacity-80 transition-opacity duration-300 drop-shadow-md flex items-center"
+                    className="pointer-events-auto hover:opacity-80 transition-opacity duration-300 drop-shadow-md flex items-center -ml-4 md:ml-0"
                 >
-                    <img src={fthLogo} alt="Farm to Home" className="h-[50px] md:h-[65px] object-contain" />
+                    <img src={fthLogo} alt="Farm to Home" className="h-[70px] md:h-[85px] object-contain" />
                 </Link>
 
                 {/* Right Side: CART & MENU */}

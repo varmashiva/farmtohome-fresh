@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import { FaShoppingCart } from 'react-icons/fa';
+import fthLogo from '../assets/media/farm to homelll.png';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -34,13 +35,12 @@ const Navbar = () => {
                 We restore pointer-events-auto on the actual links/buttons. */}
             <div className="flex justify-between items-center w-full">
 
-                {/* Left Side: FTH */}
+                {/* Left Side: FTH Logo */}
                 <Link
                     to="/"
-                    className="pointer-events-auto text-[18px] md:text-[22px] font-medium tracking-[0.2em] text-white uppercase hover:opacity-80 transition-opacity duration-300 drop-shadow-md"
-                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                    className="pointer-events-auto hover:opacity-80 transition-opacity duration-300 drop-shadow-md flex items-center"
                 >
-                    FTH
+                    <img src={fthLogo} alt="Farm to Home" className="h-[50px] md:h-[65px] object-contain" />
                 </Link>
 
                 {/* Right Side: CART & MENU */}

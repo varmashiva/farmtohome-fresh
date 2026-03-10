@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Froople';
+  src: url('./assets/fonts/Froople.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-sans: 'Froople', sans-serif;
   --color-primary: #0077b6;

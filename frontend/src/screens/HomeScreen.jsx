@@ -10,7 +10,7 @@ import img2 from '../assets/media/xyz2.avif';
 import img3 from '../assets/media/xyz3.avif';
 import img4 from '../assets/media/xyz4.avif';
 
-const ParallaxImageBlock = ({ imageSrc, id, title }) => {
+const ParallaxImageBlock = ({ imageSrc, id, title, description }) => {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -49,7 +49,7 @@ const ParallaxImageBlock = ({ imageSrc, id, title }) => {
                     {/* Desktop Top-Right Text */}
                     <div className="hidden md:block w-full max-w-[340px] ml-auto text-left pointer-events-auto">
                         <p className="text-white/90 text-base lg:text-lg font-medium leading-relaxed drop-shadow-md">
-                            Cinematic Prawns Sourced from pristine deep waters. The selection process is curated to ensure only the highest grade catch reaches your culinary canvas.
+                            {description || 'Cinematic Prawns Sourced from pristine deep waters. The selection process is curated to ensure only the highest grade catch reaches your culinary canvas.'}
                         </p>
                     </div>
                 </div>
@@ -57,7 +57,7 @@ const ParallaxImageBlock = ({ imageSrc, id, title }) => {
                 {/* Middle: Mobile Description Text */}
                 <div className="md:hidden w-full max-w-[90%] my-auto pointer-events-auto pt-6 pb-6">
                     <p className="text-white/90 text-sm font-medium leading-relaxed drop-shadow-md">
-                        Cinematic Prawns Sourced from pristine deep waters. The selection process is curated to ensure only the highest grade catch reaches your culinary canvas.
+                        {description || 'Cinematic Prawns Sourced from pristine deep waters. The selection process is curated to ensure only the highest grade catch reaches your culinary canvas.'}
                     </p>
                 </div>
 
@@ -569,12 +569,12 @@ const HomeScreen = () => {
 
             <section className="bg-black w-full relative overflow-hidden py-12 md:py-24 px-0 md:px-8">
                 {[
-                    { img: img1, title: 'HARVEST FRESH' },
-                    { img: img2, title: 'PRECISION CLEANING' },
-                    { img: img3, title: 'FRESHSEAL PACKING' },
-                    { img: img4, title: 'SWIFTDOOR DELIVERY' }
+                    { img: img1, title: 'HARVEST FRESH', description: 'Every prawn begins its journey in carefully maintained freshwater ponds, raised by dedicated aqua farmers. When the time is right, the prawns are gently harvested to ensure they retain their natural freshness and quality.' },
+                    { img: img2, title: 'PRECISION CLEANING', description: 'Right after harvest, the prawns go through a careful cleaning process. Each batch is washed and handled under hygienic conditions to remove impurities while preserving the natural taste and texture.' },
+                    { img: img3, title: 'FRESHSEAL PACKING', description: 'To lock in freshness, the prawns are immediately packed using hygienic and secure packaging. This process ensures that the seafood remains clean, fresh, and ready for your kitchen.' },
+                    { img: img4, title: 'SWIFTDOOR DELIVERY', description: 'From the farm straight to your doorstep, our delivery system ensures the prawns reach you quickly. Cold-chain handling and fast logistics keep the seafood fresh until it arrives at your home.' }
                 ].map((item, idx) => (
-                    <ParallaxImageBlock key={idx} id={`prawn-image-${idx}`} imageSrc={item.img} title={item.title} />
+                    <ParallaxImageBlock key={idx} id={`prawn-image-${idx}`} imageSrc={item.img} title={item.title} description={item.description} />
                 ))}
             </section>
 

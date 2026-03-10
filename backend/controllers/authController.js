@@ -21,7 +21,7 @@ export const registerUser = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
+        const adminEmails = ['Farmtohome@gmail.com', 'farmtohome666@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
         const role = adminEmails.includes(email) ? 'admin' : 'customer';
 
         const user = await User.create({
@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (!user.authProvider || user.authProvider === 'local') && (await bcrypt.compare(password, user.password))) {
-            const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
+            const adminEmails = ['Farmtohome@gmail.com', 'farmtohome666@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
             if (adminEmails.includes(user.email) && user.role !== 'admin') {
                 user.role = 'admin';
                 await user.save();
@@ -126,7 +126,7 @@ export const googleCallback = async (req, res) => {
 
         let user = await User.findOne({ email });
 
-        const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
+        const adminEmails = ['Farmtohome@gmail.com', 'farmtohome666@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
         const intendedRole = adminEmails.includes(email) ? 'admin' : 'customer';
 
         if (!user) {

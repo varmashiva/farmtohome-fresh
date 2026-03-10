@@ -10,7 +10,7 @@ import img2 from '../assets/media/xyz2.avif';
 import img3 from '../assets/media/xyz3.avif';
 import img4 from '../assets/media/xyz4.avif';
 
-const ParallaxImageBlock = ({ imageSrc, id }) => {
+const ParallaxImageBlock = ({ imageSrc, id, title }) => {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -39,7 +39,7 @@ const ParallaxImageBlock = ({ imageSrc, id }) => {
                     {/* Mobile Title Block */}
                     <div className="flex flex-col items-start text-left md:hidden max-w-[90%] pointer-events-auto">
                         <h2 className="text-4xl font-bold tracking-tighter text-white mb-2 drop-shadow-xl">
-                            SIGNATURE
+                            {title || 'SIGNATURE'}
                         </h2>
                         <p className="text-white/80 text-xs font-medium tracking-wide">
                             Wild Caught / Jumbo Grade / Ethical / Fresh
@@ -66,7 +66,7 @@ const ParallaxImageBlock = ({ imageSrc, id }) => {
                     {/* Desktop Title & Subtitle */}
                     <div className="hidden md:flex flex-col items-start text-left pointer-events-auto">
                         <h2 className="text-5xl lg:text-6xl font-bold tracking-tighter text-white mb-3 drop-shadow-xl">
-                            SIGNATURE
+                            {title || 'SIGNATURE'}
                         </h2>
                         <p className="text-white/80 text-sm lg:text-[15px] font-medium tracking-wide">
                             Wild Caught / Jumbo Grade / Ethical / Fresh
@@ -225,10 +225,9 @@ const HomeScreen = () => {
                         variants={fadeUpVariants}
                         className="absolute top-1/2 left-6 md:left-16 -translate-y-1/2 hidden lg:flex flex-col gap-3 text-sm font-extrabold tracking-[0.2em] text-white/90 drop-shadow-md"
                     >
-                        <a href="#products" className="hover:text-white transition-colors">HARVEST FRESH</a>
-                        <a href="#products" className="hover:text-white transition-colors">PRECISION CLEANING</a>
-                        <a href="#products" className="hover:text-white transition-colors">FRESHSEAL PACKING</a>
-                        <a href="#products" className="hover:text-white transition-colors">SWIFTDOOR DELIVERY</a>
+                        <a href="#products" className="hover:text-white transition-colors">FRESH FROM POND (CHERUVULU)</a>                        <a href="#products" className="hover:text-white transition-colors">NO PRESERVATIVES</a>
+                        <a href="#products" className="hover:text-white transition-colors">NO CHEMICALS</a>
+                        <a href="#products" className="hover:text-white transition-colors">ONLY FRESH SEAFOOD</a>
                     </motion.div>
 
                     {/* Massive Right-Side Title & Description */}
@@ -569,8 +568,13 @@ const HomeScreen = () => {
             </section>
 
             <section className="bg-black w-full relative overflow-hidden py-12 md:py-24 px-0 md:px-8">
-                {[img1, img2, img3, img4].map((imgSrc, idx) => (
-                    <ParallaxImageBlock key={idx} id={`prawn-image-${idx}`} imageSrc={imgSrc} />
+                {[
+                    { img: img1, title: 'HARVEST FRESH' },
+                    { img: img2, title: 'PRECISION CLEANING' },
+                    { img: img3, title: 'FRESHSEAL PACKING' },
+                    { img: img4, title: 'SWIFTDOOR DELIVERY' }
+                ].map((item, idx) => (
+                    <ParallaxImageBlock key={idx} id={`prawn-image-${idx}`} imageSrc={item.img} title={item.title} />
                 ))}
             </section>
 

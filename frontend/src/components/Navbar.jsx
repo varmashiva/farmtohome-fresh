@@ -38,7 +38,7 @@ const Navbar = () => {
                 {/* Left Side: FTH Logo */}
                 <Link
                     to="/"
-                    className="pointer-events-auto hover:opacity-80 transition-opacity duration-300 drop-shadow-md flex items-center -ml-20 md:ml-0"
+                    className="pointer-events-auto hover:opacity-80 transition-opacity duration-300 drop-shadow-md flex items-center -ml-16 md:ml-0"
                 >
                     <img src={fthLogo} alt="Farm to Home" className="h-[90px] md:h-[120px] object-contain" />
                 </Link>

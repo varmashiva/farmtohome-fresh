@@ -618,16 +618,17 @@ const HomeScreen = () => {
                         {/* Paragraph & List */}
                         <div className="w-full md:w-3/4 flex flex-col items-start pr-0">
                             <p className="text-sm md:text-[20px] text-white font-[500] leading-[1.5] mb-12 lg:mb-16 max-w-[800px]" style={{ fontFamily: 'Froople, sans-serif' }}>
-                                Whether you're planning your first campaign or refining your brand's visual identity, here are answers to some common questions about how we work
+                                Whether you're ordering seafood for the first time or looking for a trusted source of fresh prawns, here are answers to some common questions about how we deliver freshness from farm to home.
                             </p>
 
                             <div className="flex flex-col w-full gap-4">
                                 {[
-                                    { question: "What type of clients do you work with?", answer: "We collaborate with brands, artists, agencies, and publications across fashion, lifestyle, music, and culture. Whether emerging or established, we align best with those who value visual impact and creative direction." },
-                                    { question: "Do you offer full-service production?", answer: "Yes, we handle everything from creative conceptualization and location scouting to talent casting, photography, video production, and post-production editing." },
-                                    { question: "Can we book just one service, like photography or editing?", answer: "Absolutely. While we excel at end-to-end production, our customized service packages allow you to select individual creative services tailored to your specific needs." },
-                                    { question: "How far in advance should we book?", answer: "We recommend reaching out at least 4 to 6 weeks in advance to ensure availability and allow sufficient time for proper pre-production planning." },
-                                    { question: "Do you work internationally?", answer: "Yes, our team is available for travel and has extensive experience executing flawless remote productions and campaigns globally." },
+                                    { question: "What makes your prawns fresh?", answer: "Our prawns are harvested directly from carefully maintained freshwater farms. Once harvested, they are immediately cleaned and packed to preserve their natural taste, texture, and freshness before being delivered to your doorstep." },
+                                    { question: "Are the prawns cleaned before delivery?", answer: "Yes. Every batch goes through a hygienic cleaning process. The prawns are thoroughly washed and prepared in a controlled environment to ensure they are clean and ready for cooking." },
+                                    { question: "How are the prawns packed?", answer: "We use premium, hygienic packaging designed to lock in freshness. Our sealed packaging protects the prawns during transport and maintains their quality until they reach your home." },
+                                    { question: "How long does delivery take?", answer: "We focus on fast delivery to maintain freshness. Once your order is placed, our team ensures the prawns are packed and dispatched quickly so they arrive fresh at your doorstep." },
+                                    { question: "Do you use preservatives?", answer: "No. We believe seafood should be natural and honest. Our prawns are delivered without preservatives or chemicals, just fresh seafood from farm to home." },
+                                    { question: "Where are your prawns sourced from?", answer: "Our prawns come directly from trusted aqua farms where they are raised in clean freshwater ponds by experienced farmers who prioritize quality and sustainability." },
                                 ].map((item, index) => {
                                     const isOpen = openFaqIndex === index;
                                     return (

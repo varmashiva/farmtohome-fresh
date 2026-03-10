@@ -12,19 +12,11 @@ import img4 from '../assets/media/xyz4.avif';
 
 const ParallaxImageBlock = ({ imageSrc, id, title }) => {
     const ref = useRef(null);
-    const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
-
-    useEffect(() => {
-        const handleResize = () => setIsDesktop(window.innerWidth >= 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"]
     });
-    const imageParallaxY = useTransform(scrollYProgress, [0, 1], isDesktop ? ['-10%', '10%'] : ['-25%', '25%']);
+    const imageParallaxY = useTransform(scrollYProgress, [0, 1], ['-25%', '25%']);
 
     return (
         <div ref={ref} id={id} className="mx-auto w-[95%] md:w-full max-w-[1400px] relative aspect-[19/23] md:aspect-[21/10] overflow-hidden rounded-md mb-8 md:mb-16 last:mb-0">
@@ -32,7 +24,7 @@ const ParallaxImageBlock = ({ imageSrc, id, title }) => {
             <motion.img
                 src={imageSrc}
                 alt="Cinematic Prawns"
-                className="absolute inset-0 w-full h-full object-cover object-center scale-[1.5] md:scale-[1.15] origin-center pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover object-center scale-[1.5] origin-center pointer-events-none"
                 style={{ y: imageParallaxY }}
             />
 
@@ -319,7 +311,7 @@ const HomeScreen = () => {
                                     whileInView="visible"
                                     viewport={{ once: true, margin: "-50px" }}
                                     variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-                                    id="products" className="text-[50px] md:text-[80px] lg:text-[110px] font-black leading-[0.85] tracking-tighter text-[#eaeaea] uppercase flex flex-col" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900 }}>
+                                    id="products" className="text-[50px] md:text-[80px] lg:text-[110px] font-black leading-[0.85] tracking-tighter text-[#eaeaea] uppercase flex flex-col" style={{ fontFamily: 'Froople, sans-serif', fontWeight: 900 }}>
                                     <div className="overflow-hidden pb-2 -mb-2"><motion.span variants={{ hidden: { y: "110%", opacity: 0, filter: "blur(8px)" }, visible: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }} className="block origin-bottom-left">FRESH CATCH</motion.span></div>
                                     <div className="overflow-hidden pb-2 -mb-2"><motion.span variants={{ hidden: { y: "110%", opacity: 0, filter: "blur(8px)" }, visible: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }} className="block origin-bottom-left">OF THE DAY</motion.span></div>
                                 </motion.h2>
@@ -339,7 +331,7 @@ const HomeScreen = () => {
 
                             {/* Right Column / Description */}
                             <div className="w-full md:w-[80%] lg:w-[75%] flex flex-col items-start pr-4 md:pr-0">
-                                <p className="text-[#aaaaaa] font-[500] text-base md:text-[20px] max-w-3xl leading-[1.6]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                                <p className="text-[#aaaaaa] font-[500] text-base md:text-[20px] max-w-3xl leading-[1.6]" style={{ fontFamily: 'Froople, sans-serif' }}>
                                     Our prawns are responsibly farmed in traditional freshwater ponds (cheruvulu) by experienced aqua farmers across coastal Andhra Pradesh. Harvested fresh and packed the same day to preserve natural taste and quality.
                                 </p>
                             </div>
@@ -365,7 +357,7 @@ const HomeScreen = () => {
                                     transition={{ duration: 0.6, ease: "easeOut" }}
                                     key={product._id}
                                     className="bg-[#0c0c0c] border border-[#222] rounded-[32px] p-5 md:p-6 lg:p-10 flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-16 hover:border-[#333] transition-colors duration-500 shadow-2xl relative items-center justify-between overflow-hidden group/card"
-                                    style={{ fontFamily: 'Poppins, sans-serif' }}
+                                    style={{ fontFamily: 'Froople, sans-serif' }}
                                 >
                                     {/* Noise Texture */}
                                     <div className="absolute inset-0 w-full h-full opacity-[0.05] pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
@@ -605,7 +597,7 @@ const HomeScreen = () => {
                                 whileInView="visible"
                                 viewport={{ once: true, margin: "-50px" }}
                                 variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-                                className="text-[50px] md:text-[80px] lg:text-[110px] font-black leading-[0.85] tracking-tighter text-[#eaeaea] uppercase flex flex-col" style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 900 }}>
+                                className="text-[50px] md:text-[80px] lg:text-[110px] font-black leading-[0.85] tracking-tighter text-[#eaeaea] uppercase flex flex-col" style={{ fontFamily: 'Froople, sans-serif', fontWeight: 900 }}>
                                 <div className="overflow-hidden pb-4 -mb-4"><motion.span variants={{ hidden: { y: "110%", opacity: 0, filter: "blur(8px)" }, visible: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }} className="block origin-bottom-left">NEED</motion.span></div>
                                 <div className="overflow-hidden pb-4 -mb-4"><motion.span variants={{ hidden: { y: "110%", opacity: 0, filter: "blur(8px)" }, visible: { y: 0, opacity: 1, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } } }} className="block origin-bottom-left">ANSWER</motion.span></div>
                             </motion.h2>
@@ -625,7 +617,7 @@ const HomeScreen = () => {
 
                         {/* Paragraph & List */}
                         <div className="w-full md:w-3/4 flex flex-col items-start pr-0">
-                            <p className="text-sm md:text-[20px] text-white font-[500] leading-[1.5] mb-12 lg:mb-16 max-w-[800px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                            <p className="text-sm md:text-[20px] text-white font-[500] leading-[1.5] mb-12 lg:mb-16 max-w-[800px]" style={{ fontFamily: 'Froople, sans-serif' }}>
                                 Whether you're planning your first campaign or refining your brand's visual identity, here are answers to some common questions about how we work
                             </p>
 
@@ -645,7 +637,7 @@ const HomeScreen = () => {
                                             className="flex flex-col bg-[#111111] rounded-[4px] group cursor-pointer hover:bg-[#181818] transition-colors duration-300 w-full overflow-hidden"
                                         >
                                             <div className="flex justify-between items-center py-5 md:py-6 px-5 md:px-8">
-                                                <span className="text-[14px] md:text-[16px] font-[500] text-white/80" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                                                <span className="text-[14px] md:text-[16px] font-[500] text-white/80" style={{ fontFamily: 'Froople, sans-serif' }}>
                                                     {item.question}
                                                 </span>
                                                 <motion.span
@@ -666,7 +658,7 @@ const HomeScreen = () => {
                                                         className="px-5 md:px-8"
                                                     >
                                                         <div className="pb-6 md:pb-8 pt-2">
-                                                            <p className="text-[14px] md:text-[15px] text-[#999] font-[400] leading-[1.7] max-w-[90%]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                                                            <p className="text-[14px] md:text-[15px] text-[#999] font-[400] leading-[1.7] max-w-[90%]" style={{ fontFamily: 'Froople, sans-serif' }}>
                                                                 {item.answer}
                                                             </p>
                                                         </div>

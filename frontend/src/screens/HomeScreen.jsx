@@ -75,7 +75,7 @@ const ParallaxImageBlock = ({ imageSrc, id, title, description }) => {
 
                     <div className="w-fit md:w-full md:max-w-[200px] flex justify-start md:justify-start pointer-events-auto">
                         <Link to="/product/69a6619514974541e40c97ae" className="bg-white text-black text-[12px] md:text-sm font-bold py-3 md:py-3 px-6 md:px-6 rounded flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-xl tracking-wider">
-                            Catch Some Prowns
+                            Catch Some Prawns
                         </Link>
                     </div>
                 </div>
@@ -281,7 +281,7 @@ const HomeScreen = () => {
                             className="pointer-events-auto"
                         >
                             <Link to="/product/69a6619514974541e40c97ae" className="bg-white text-black text-[11px] md:text-sm font-bold py-2 md:py-3 px-4 md:px-6 rounded flex items-center gap-2 hover:bg-gray-200 transition-all shadow-xl tracking-wider">
-                                Catch Some Prowns
+                                Catch Some Prawns
                             </Link>
                         </motion.div>
                     </div>

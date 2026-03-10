@@ -69,7 +69,7 @@ const CartScreen = () => {
                         <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.05]" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"3\" stitchTiles=\"stitch\"/>%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/>%3C/svg%3E')" }}></div>
                         <p className="text-[18px] md:text-[24px] font-[600] tracking-tight text-[#888] mb-8 relative z-10">Your basket forms an empty sea...</p>
                         <Link to="/product/69a6619514974541e40c97ae" className="relative z-10 px-8 py-4 bg-[#eaeaea] text-[#111] font-[800] text-[13px] uppercase tracking-[0.1em] rounded-[4px] hover:bg-white transition-all duration-300">
-                            CATCH SOME PROWNS
+                            CATCH SOME PRAWNS
                         </Link>
                     </div>
                 ) : (

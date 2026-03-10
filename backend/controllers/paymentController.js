@@ -151,7 +151,7 @@ export const verifyPayment = async (req, res) => {
                 // Fire off confirmation emails asynchronously
                 const customerEmail = req.user?.email;
                 const customerName = req.user?.name || 'Customer';
-                const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com'];
+                const adminEmails = ['Farmtohome@gmail.com', 'shivavarma336@gmail.com', 'vinnugollakoti289@gmail.com', 'charankanuri2003@gmail.com', 'charancherry8180@gmail.com'];
 
                 if (customerEmail) {
                     sendEmail(

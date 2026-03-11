@@ -713,7 +713,7 @@ const HomeScreen = () => {
                             <a href="https://wa.me/919876543210" className="hover:text-green-500 transition-colors duration-300" title="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
                                 <FaWhatsapp size={24} />
                             </a>
-                            <a href="https://instagram.com" className="hover:text-[#E1306C] transition-colors duration-300" title="Instagram" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.instagram.com/farm_to_home_666?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="hover:text-[#E1306C] transition-colors duration-300" title="Instagram" target="_blank" rel="noopener noreferrer">
                                 <FaInstagram size={23} />
                             </a>
                         </div>

@@ -494,7 +494,7 @@ const HomeScreen = () => {
                                             </div>
 
                                             {/* Bulk Order Contact */}
-                                            <div className="w-full mt-4 flex items-center justify-center gap-1.5 text-[#888] text-[10px] md:text-[11px] font-semibold tracking-widest uppercase">
+                                            <div className="w-full mt-4 py-4 flex items-center justify-center gap-1.5 text-[#888] text-[10px] md:text-[11px] font-semibold tracking-widest uppercase">
                                                 <span className="text-[13px]">⚠️</span>
                                                 <p>For bulk orders please contact <a href="tel:+919876543210" className="text-white hover:text-green-400 transition-colors ml-1">+91 9876543210</a></p>
                                             </div>

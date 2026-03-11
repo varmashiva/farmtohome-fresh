@@ -272,8 +272,9 @@ const HomeScreen = () => {
                             variants={fadeUpVariants}
                             className="flex flex-col gap-1 text-[10px] md:text-sm font-semibold tracking-wider text-white pointer-events-auto"
                         >
-                            <p>EST. 2024 • LOCAL SECURE</p>
-                            <p className="opacity-70">INDEPENDENT • GLOBAL REACH</p>
+
+                            <p className="opacity-70">CONTACT US - +91 9876543210</p>
+                            <p className="opacity-70">APPROVED ☑️</p>
                         </motion.div>
 
                         <motion.div
@@ -491,6 +492,12 @@ const HomeScreen = () => {
                                                     </button>
                                                 )}
                                             </div>
+
+                                            {/* Bulk Order Contact */}
+                                            <div className="w-full mt-4 flex items-center justify-center gap-1.5 text-[#888] text-[10px] md:text-[11px] font-semibold tracking-widest uppercase">
+                                                <span className="text-[13px]">⚠️</span>
+                                                <p>For bulk orders please contact <a href="tel:+919876543210" className="text-white hover:text-green-400 transition-colors ml-1">+91 9876543210</a></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -687,7 +694,14 @@ const HomeScreen = () => {
                         <p className="text-[12px] md:text-sm tracking-widest uppercase opacity-70">Delivering pristine seafood freshness</p>
                     </div>
 
-                    {/* Contact & Socials & FSSAI Logo */}
+                    {/* FSSAI Logo */}
+                    <div className="flex flex-col items-center pointer-events-auto">
+                        <div className="bg-white/90 p-2 rounded flex items-center justify-center">
+                            <img src={fssaiLogo} alt="FSSAI Certified" className="h-[45px] object-contain" />
+                        </div>
+                    </div>
+
+                    {/* Contact & Socials */}
                     <div className="flex flex-col items-center md:items-end gap-5">
                         <div className="flex gap-6 items-center pointer-events-auto">
                             <a href="tel:+919876543210" className="hover:text-white transition-colors duration-300" title="Call Us">
@@ -703,10 +717,6 @@ const HomeScreen = () => {
                         <p className="text-[11px] md:text-xs tracking-[0.15em] uppercase pointer-events-auto hover:text-white transition-colors">
                             <a href="tel:+919876543210">Contact Us: +91 98765 43210</a>
                         </p>
-                        {/* FSSAI Logo */}
-                        <div className="flex flex-col items-center pointer-events-auto">
-                            <img src={fssaiLogo} alt="FSSAI Certified" className="h-[45px] object-contain" />
-                        </div>
                     </div>
 
                 </div>

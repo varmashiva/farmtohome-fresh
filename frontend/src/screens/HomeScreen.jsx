@@ -688,7 +688,7 @@ const HomeScreen = () => {
             </section>
 
             {/* Footer Section */}
-            <footer className="bg-[#050505] text-[#888] py-16 px-6 md:px-16 w-full relative z-10 border-t border-white/5" style={{ fontFamily: 'Froople, sans-serif' }}>
+            <footer className="bg-[#050505] text-[#888] pt-16 pb-4 px-6 md:px-16 w-full relative z-10 border-t border-white/5" style={{ fontFamily: 'Froople, sans-serif' }}>
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 md:gap-8">
 
                     {/* Brand & Label */}

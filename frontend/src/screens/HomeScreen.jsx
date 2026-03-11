@@ -9,6 +9,8 @@ import img1 from '../assets/media/xyz1.avif';
 import img2 from '../assets/media/xyz2.avif';
 import img3 from '../assets/media/xyz3.avif';
 import img4 from '../assets/media/xyz4.avif';
+import fssaiLogo from '../assets/media/fssai.png';
+import { FaInstagram, FaWhatsapp, FaPhoneAlt } from 'react-icons/fa';
 
 const ParallaxImageBlock = ({ imageSrc, id, title, description }) => {
     const ref = useRef(null);
@@ -674,6 +676,44 @@ const HomeScreen = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Footer Section */}
+            <footer className="bg-[#050505] text-[#888] py-16 px-6 md:px-16 w-full relative z-10 border-t border-white/5" style={{ fontFamily: 'Froople, sans-serif' }}>
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 md:gap-8">
+
+                    {/* Brand & Label */}
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2 mb-4 md:mb-0">
+                        <h2 className="text-[18px] md:text-xl font-bold text-white tracking-widest uppercase pointer-events-auto">Farm to Home</h2>
+                        <p className="text-[12px] md:text-sm tracking-widest uppercase opacity-70">Delivering pristine seafood freshness</p>
+                    </div>
+
+                    {/* FSSAI Logo */}
+                    <div className="flex flex-col items-center pointer-events-auto">
+                        <div className="bg-white/90 p-2 rounded flex items-center justify-center">
+                            <img src={fssaiLogo} alt="FSSAI Certified" className="h-[45px] object-contain" />
+                        </div>
+                    </div>
+
+                    {/* Contact & Socials */}
+                    <div className="flex flex-col items-center md:items-end gap-5">
+                        <div className="flex gap-6 items-center pointer-events-auto">
+                            <a href="tel:+919876543210" className="hover:text-white transition-colors duration-300" title="Call Us">
+                                <FaPhoneAlt size={20} />
+                            </a>
+                            <a href="https://wa.me/919876543210" className="hover:text-green-500 transition-colors duration-300" title="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
+                                <FaWhatsapp size={24} />
+                            </a>
+                            <a href="https://instagram.com" className="hover:text-[#E1306C] transition-colors duration-300" title="Instagram" target="_blank" rel="noopener noreferrer">
+                                <FaInstagram size={23} />
+                            </a>
+                        </div>
+                        <p className="text-[11px] md:text-xs tracking-[0.15em] uppercase pointer-events-auto hover:text-white transition-colors">
+                            <a href="tel:+919876543210">Contact Us: +91 98765 43210</a>
+                        </p>
+                    </div>
+
+                </div>
+            </footer>
 
         </div>
     );

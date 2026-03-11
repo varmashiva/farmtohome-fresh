@@ -89,7 +89,7 @@ export const generateOrderHtml = (order, customerName, isForAdmin = false, statu
             <div style="margin-top: 40px; text-align: center;">
                 <p style="font-size: 13px; color: #888888; line-height: 1.5;">
                     If you have any questions about this order, please contact our support team at<br>
-                    <strong><a href="https://wa.me/919876543210" style="color: #4CAF50; text-decoration: none;">+91 9876543210</a></strong>
+                    <strong><a href="https://wa.me/918884143699" style="color: #4CAF50; text-decoration: none;">+91 8884143699</a></strong>
                 </p>
             </div>
             ` : ''}

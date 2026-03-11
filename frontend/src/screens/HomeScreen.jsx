@@ -273,7 +273,7 @@ const HomeScreen = () => {
                             className="flex flex-col gap-1 text-[10px] md:text-sm font-semibold tracking-wider text-white pointer-events-auto"
                         >
 
-                            <p className="opacity-70">CONTACT US - +91 9876543210</p>
+                            <p className="opacity-70">CONTACT US - +91 8884143699</p>
                             <p className="opacity-70">APPROVED ☑️</p>
                         </motion.div>
 
@@ -498,7 +498,7 @@ const HomeScreen = () => {
                                                 <p className="leading-relaxed">
                                                     <span className="text-[13px] mr-1.5 inline-block -translate-y-[1px]">⚠️</span>
                                                     For bulk orders please contact
-                                                    <a href="tel:+919876543210" className="text-white hover:text-green-400 transition-colors ml-1 whitespace-nowrap">+91 9876543210</a>
+                                                    <a href="tel:+918884143699" className="text-white hover:text-green-400 transition-colors ml-1 whitespace-nowrap">+91 8884143699</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -707,10 +707,10 @@ const HomeScreen = () => {
                     {/* Contact & Socials */}
                     <div className="flex flex-col items-center md:items-end gap-5">
                         <div className="flex gap-6 items-center pointer-events-auto">
-                            <a href="tel:+919876543210" className="hover:text-white transition-colors duration-300" title="Call Us">
+                            <a href="tel:+918884143699" className="hover:text-white transition-colors duration-300" title="Call Us">
                                 <FaPhoneAlt size={20} />
                             </a>
-                            <a href="https://wa.me/919876543210" className="hover:text-green-500 transition-colors duration-300" title="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
+                            <a href="https://wa.me/918884143699" className="hover:text-green-500 transition-colors duration-300" title="Chat on WhatsApp" target="_blank" rel="noopener noreferrer">
                                 <FaWhatsapp size={24} />
                             </a>
                             <a href="https://www.instagram.com/farm_to_home_666?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" className="hover:text-[#E1306C] transition-colors duration-300" title="Instagram" target="_blank" rel="noopener noreferrer">
@@ -718,7 +718,7 @@ const HomeScreen = () => {
                             </a>
                         </div>
                         <p className="text-[11px] md:text-xs tracking-[0.15em] uppercase pointer-events-auto hover:text-white transition-colors">
-                            <a href="tel:+919876543210">Contact Us: +91 98765 43210</a>
+                            <a href="tel:+918884143699">Contact Us: +91 88841 43699</a>
                         </p>
                     </div>
 

@@ -271,9 +271,9 @@ const ProductScreen = () => {
                                     {/* Bulk Order Contact */}
                                     <div className="w-full mt-4 py-4 text-center text-[#888] text-[10px] md:text-[11px] font-semibold tracking-widest uppercase">
                                         <p className="leading-relaxed">
-                                            <span className="text-[13px] mr-1.5 inline-block -translate-y-[1px]">⚠️</span>
+                                            <span className="text-[13px] mr-1.5 inline-block -translate-y-[1px]"></span>
                                             For bulk orders please contact
-                                            <a href="tel:+919876543210" className="text-white hover:text-green-400 transition-colors ml-1 whitespace-nowrap">+91 9876543210</a>
+                                            <a href="tel:+918884143699" className="text-white hover:text-green-400 transition-colors ml-1 whitespace-nowrap">+91 8884143699</a>
                                         </p>
                                     </div>
                                 </div>

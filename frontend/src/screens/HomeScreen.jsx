@@ -687,14 +687,7 @@ const HomeScreen = () => {
                         <p className="text-[12px] md:text-sm tracking-widest uppercase opacity-70">Delivering pristine seafood freshness</p>
                     </div>
 
-                    {/* FSSAI Logo */}
-                    <div className="flex flex-col items-center pointer-events-auto">
-                        <div className="bg-white/90 p-2 rounded flex items-center justify-center">
-                            <img src={fssaiLogo} alt="FSSAI Certified" className="h-[45px] object-contain" />
-                        </div>
-                    </div>
-
-                    {/* Contact & Socials */}
+                    {/* Contact & Socials & FSSAI Logo */}
                     <div className="flex flex-col items-center md:items-end gap-5">
                         <div className="flex gap-6 items-center pointer-events-auto">
                             <a href="tel:+919876543210" className="hover:text-white transition-colors duration-300" title="Call Us">
@@ -710,6 +703,10 @@ const HomeScreen = () => {
                         <p className="text-[11px] md:text-xs tracking-[0.15em] uppercase pointer-events-auto hover:text-white transition-colors">
                             <a href="tel:+919876543210">Contact Us: +91 98765 43210</a>
                         </p>
+                        {/* FSSAI Logo */}
+                        <div className="flex flex-col items-center pointer-events-auto">
+                            <img src={fssaiLogo} alt="FSSAI Certified" className="h-[45px] object-contain" />
+                        </div>
                     </div>
 
                 </div>

@@ -449,7 +449,7 @@ const HomeScreen = () => {
                                         <div className="mt-auto w-full flex flex-col sm:flex-row items-center gap-4 border-t border-[#1a1a1a] pt-6 md:pt-8 bg-transparent relative z-10">
 
                                             {/* Quantity Controls */}
-                                            <div className="flex items-center bg-[#111] border border-[#222] rounded-[16px] px-2 py-1 h-[48px] md:h-[56px] w-full sm:w-auto flex-shrink-0">
+                                            <div className="flex items-center justify-center bg-[#111] border border-[#222] rounded-[16px] px-4 py-1 h-[48px] md:h-[56px] w-full sm:w-auto flex-shrink-0">
                                                 <button
                                                     onClick={() => handleQtyChange(product._id, getQty(product._id) - 0.5)}
                                                     className="w-10 h-10 flex items-center justify-center text-white/50 hover:text-white transition-colors text-xl"
@@ -486,7 +486,7 @@ const HomeScreen = () => {
                                                                 navigate('/login');
                                                             }
                                                         }}
-                                                        className="w-full bg-[#eaeaea] hover:bg-white text-[#111] font-[900] py-[12px] md:py-[18px] rounded-[16px] text-center transition-all duration-300 transform hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2 tracking-[0.15em] uppercase text-[11px] md:text-[13px]"
+                                                        className="w-full bg-gradient-to-r from-green-500 to-green-400 hover:from-green-400 hover:to-green-300 text-[#111] font-[900] py-[14px] md:py-[18px] rounded-[16px] text-center transition-all duration-300 transform hover:scale-[1.02] shadow-[0_0_20px_rgba(74,222,128,0.25)] hover:shadow-[0_0_30px_rgba(74,222,128,0.4)] flex items-center justify-center gap-2 tracking-[0.15em] uppercase text-[11px] md:text-[13px]"
                                                     >
                                                         <span>Add To Cart</span>
                                                         <span className="opacity-30">|</span>

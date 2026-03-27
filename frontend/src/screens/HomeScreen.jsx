@@ -274,7 +274,7 @@ const HomeScreen = () => {
                         >
 
                             <p className="opacity-70">CONTACT US - +91 8884143699</p>
-                            <p className="opacity-70">APPROVED ☑️</p>
+                            <p className="opacity-70">FSSAI REG NO: 23626028001682</p>
                         </motion.div>
 
                         <motion.div
